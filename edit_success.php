@@ -1,11 +1,5 @@
 <?php
-try{
-        session_start();
-        session_destroy();
-    }catch(PDOException $e){
-    echo 'DB接続エラー！: ' . $e->getMessage();
-}
-
+    require_once "init.php";
 ?>
 
 <html>
@@ -15,6 +9,6 @@ try{
     </head>
     <body>
         <h1>編集完了</h1>
-        <button type="button" onclick="location.href='/admin.php'">ユーザー名簿一覧</button>
+        <button type="button" onclick="location.href='/schedule/admin.php'">ユーザー名簿一覧</button>
     </body>
 </html>

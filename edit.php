@@ -1,7 +1,7 @@
 <?php
-try{
-    session_start();
-    $db = new PDO('mysql:dbname=test;host=localhost;charset=utf8;','training','root');
+    require_once "init.php";
+    
+    $db = DbConnect();
     $db->query('SET NAMES utf8;');
 
     $db_account = $db->prepare('SELECT * FROM account WHERE id = :id');
@@ -18,7 +18,7 @@ try{
                 $_SESSION['edit_pw'] = $_POST['edit_pw'];
                 $_SESSION['id'] =$account['id'];
                 $_SESSION['edit_type'] = 'user';
-                header('Location:/edit_confirm.php');
+                header('Location:/schedule/edit_confirm.php');
             }else{
                 echo "パスワードが違います";
             }
@@ -26,9 +26,6 @@ try{
             echo "入力してください。";
          }
     }
-}catch(PDOException $e){
-    echo 'DB接続エラー！: ' . $e->getMessage();
-}
 ?>
 
 <html>
@@ -38,7 +35,7 @@ try{
     </head>
     <body>
         <h1>アカウント編集</h1>
-        <button type="button" onclick="location.href='/admin.php'">戻る</button>
+        <button type="button" onclick="location.href='/schedule/admin.php'">戻る</button>
         <form action="" method="post">
             <p>ユーザー名</p>
             <input type="text" name="edit_user_name" value=<?php echo htmlspecialchars($account['user_name'],ENT_QUOTES,'UTF-8'); ?>>

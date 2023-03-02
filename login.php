@@ -1,42 +1,61 @@
 <?php
-try{
-    session_start();
-    $db = new PDO('mysql:dbname=test;host=localhost;charset=utf8;','training','root');
+    require_once "init.php";
+
+
+    $db = DbConnect();
     $db->query('SET NAMES utf8;');
 
-    if(isset($_POST['user_name']) && isset($_POST['pw'])){
-        if($_POST['pw'] !='' && !ctype_space($_POST['pw'])){
-            $db_account = $db->prepare('SELECT * FROM account WHERE user_name = :user_name and pw = :pw');
-            $db_account->bindValue(':user_name', $_POST['user_name']);
-            $db_account->bindValue(':pw', $_POST['pw']);
-            $db_account->execute();
-            
-            foreach($db_account as $user){
-                if($user['del'] == 0){
+    if(isset($_SESSION['loggin_id'])){
+        $db_account = $db->prepare('SELECT * FROM account WHERE id = :id');
+        $db_account->bindValue(':id', $_SESSION['loggin_id']);
+        $db_account->execute();
+        foreach($db_account as $user){
+            if($user['del'] == 0){
                 $account = $user;
-                }
             }
-            if(isset($account)){
-                $_SESSION['id'] = $account['id'];
-                if($account['role'] == 1){
-                    header('Location:/admin.php');
-                    exit;
-                }elseif($account['role'] == 2){
-                    header('Location:/user_schedule.php');
-                    exit;
+        }
+        if(isset($account)){
+            $_SESSION['loggin_id'] = $account['id'];
+            if($account['role'] == 1){
+                header('Location:/schedule/admin.php');
+                exit;
+            }elseif($account['role'] == 2){
+                header('Location:/schedule/user_schedule.php');
+                exit;
+            }
+        }
+    }else{
+        if(isset($_POST['user_name']) && isset($_POST['pw'])){
+            if($_POST['pw'] !='' && !ctype_space($_POST['pw'])){
+                $db_account = $db->prepare('SELECT * FROM account WHERE user_name = :user_name and pw = :pw');
+                $db_account->bindValue(':user_name', $_POST['user_name']);
+                $db_account->bindValue(':pw', $_POST['pw']);
+                $db_account->execute();
+
+                foreach($db_account as $user){
+                    if($user['del'] == 0){
+                        $account = $user;
+                    }
+                }
+                if(isset($account)){
+                    $_SESSION['loggin_id'] = $account['id'];
+                    if($account['role'] == 1){
+                        header('Location:/schedule/admin.php');
+                        exit;
+                    }elseif($account['role'] == 2){
+                        header('Location:/schedule/user_schedule.php');
+                        exit;
+                    }else{
+                        echo "「ユーザー名」もしくは「パスワード」が間違っています。";
+                    }
                 }else{
                     echo "「ユーザー名」もしくは「パスワード」が間違っています。";
                 }
             }else{
-                echo "「ユーザー名」もしくは「パスワード」が間違っています。";
+                echo "「ユーザー名」もしくは「パスワード」に半角スペースのみ入力されてるか、何も入力されていません。";
             }
-        }else{
-            echo "「ユーザー名」もしくは「パスワード」に半角スペースのみ入力されてるか、何も入力されていません。";
         }
     }
-}catch(PDOException $e){
-        echo 'DB接続エラー！: ' . $e->getMessage();
-}
 ?>
 
 

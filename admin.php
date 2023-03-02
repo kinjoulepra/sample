@@ -1,7 +1,7 @@
 <?php
-    session_start();
+    require_once "init.php";
     try{
-        $db = new PDO('mysql:dbname=test;host=localhost;charset=utf8;','training','root');
+        $db = DbConnect();
         $db->query('SET NAMES utf8;');
 
         $account_all = $db->prepare('SELECT * FROM account');
@@ -10,14 +10,6 @@
             if($user['del'] == 0){
                 $users[$user['id']] = $user;
             }
-        }
-        if(isset($_POST['edit_user_id'])){
-            $_SESSION['edit_user_id'] = $_POST['edit_user_id'];
-            header('Location:/edit.php');
-        }elseif(isset($_POST['del_user_id'])){
-            $_SESSION['del_user_id'] = $_POST['del_user_id'];
-            $_SESSION['del_type'] = "user_del";
-            header('Location:/user_del.php');
         }
 
         
@@ -34,10 +26,11 @@
     </head>
     <body>
         <h1>ユーザー名簿一覧</h1>
-        <form action="/add_user.php" method="post">
+        <form action="/schedule/add_user.php" method="post">
             <input type="submit" value="登録">
         </form>
-        <button type="button" onclick="location.href='/login.php'">戻る</button>
+        <button type="button" onclick="location.href='/schedule/login.php'">戻る</button>
+        <button type="button" onclick="location.href='/schedule/logout.php'">ログアウト</button>
         <table border =10;>
             <tr>
                 <th>ＩＤ</th>
@@ -50,20 +43,20 @@
                     <th><?php echo htmlspecialchars($user['user_name'],ENT_QUOTES,'UTF-8'); ?></th>
                     <th><?php echo htmlspecialchars($user['del'],ENT_QUOTES,'UTF-8'); ?></th>
                     <th>
-                        <form  action="/admin_schedule.php" method="post">
+                        <form  action="/schedule/admin_schedule.php" method="post">
                         <input type="submit" value="スケジュール閲覧">
                         <input type="hidden" name="user_id" value=<?php echo htmlspecialchars($user['id'],ENT_QUOTES,'UTF-8'); ?>>
                         <input type="hidden" name="user_name" value=<?php echo htmlspecialchars($user['user_name'],ENT_QUOTES,'UTF-8'); ?>>
                         </form>
                     </th>
                     <th>
-                        <form action="" method="post">
+                        <form action="/schedule/edit.php" method="post">
                         <input type="hidden" name="edit_user_id" value=<?php echo htmlspecialchars($user['id'],ENT_QUOTES,'UTF-8'); ?>>
                         <input type="submit" value="編集">
                         </form>
                     </th>
                     <th>
-                        <form action="" method="post">
+                        <form action="schedule/user_del.php" method="post">
                         <input type="hidden" name="del_user_id" value=<?php echo htmlspecialchars($user['id'],ENT_QUOTES,'UTF-8'); ?>>
                         <input type="submit" value="削除">
                         </form>

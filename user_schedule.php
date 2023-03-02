@@ -96,7 +96,7 @@
         <meta charset ="UTF-8">
     </head>
     <body>
-        <form action="/user_schedule.php" method="GET">
+        <form action="/schedule/user_schedule.php" method="GET">
             <select name="year">
                 <?php for($i = 2000; $i <= 2100; $i++){
                         $select = "";
@@ -117,7 +117,7 @@
             </select>
             <input type="submit" value="表示">
         </form>
-        <form action="/user_schedule.php" method="POST">
+        <form action="/schedule/user_schedule.php" method="POST">
             <select name="day">
                 <?php for($i = 1; $i <= $date_loopday; $i++){
                         $select = "";
@@ -133,6 +133,7 @@
             <input type="hidden" name="token" value=<?php echo $token; ?>>
             <input type="submit" value="登録">
         </form>
+        <button type="button" onclick="location.href='/schedule/logout.php'">ログアウト</button>
         <table border="1">
             <tr>
                 <th>日付</th>
