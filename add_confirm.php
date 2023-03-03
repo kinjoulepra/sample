@@ -3,6 +3,8 @@
     
     $db = DbConnect();
     $db->query('SET NAMES utf8;');
+
+
     
     if(isset($_POST['add_user_name']) && isset($_POST['add_user_pw'])){
         if($_POST['add_user_name'] !='' && !ctype_space($_POST['add_user_name'])){
@@ -47,11 +49,11 @@
             <p>パスワード</p>
             <p><?php echo htmlspecialchars($_POST['add_user_pw'],ENT_QUOTES,'UTF-8'); ?></p>
             <p>権限</p>
-            <p><?php echo htmlspecialchars($_POST['add_user_role'],ENT_QUOTES,'UTF-8'); ?></p>
+            <p> <?php echo ROLES[$_POST['add_user_role']]['role']; ?></p>
             <br>
             <input type="hidden" name="add_user_name" value=<?php echo $_POST['add_user_name']; ?>>
             <input type="hidden" name="add_user_pw" value=<?php echo $_POST['add_user_pw']; ?>>
-            <input type="hidden" name="add_user_role" value=<?php echo $_POST['add_user_role']; ?>>
+            <input type="hidden" name="add_user_role" value=<?php echo ROLES[$_POST['add_user_role']]['role']; ?>>
             <input type="submit" name="add_ok" value="OK">
         </form>
         <button type="button" onclick="location.href='/schedule/add_user.php'">戻る</button>

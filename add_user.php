@@ -16,7 +16,7 @@ require_once "init.php";
             <p>パスワード</p>
             <input type="password" name="add_user_pw">
             <p>権限</p>
-            <select name="role">
+            <select name="add_user_role">
                 <?php foreach(ROLES as $key => $role){ ?>
                     <option value=<?php echo $key; ?> > <?php echo $role['role']; ?></option>
                 <?php } ?>

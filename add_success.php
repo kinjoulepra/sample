@@ -1,11 +1,12 @@
 <?php
     require_once "init.php";
-    if($_POST['add_user'] == "add_user" && isset($_POST{'add_ok'})){
-        $db_data = $db->prepare('INSERT INTO account(id, user_name, pw, del, role) VALUES (:id,:user_name,:pw,:del,:role)');
-        $db_data->bindValue(':id',"");
+    $db = DbConnect();
+    $db->query('SET NAMES utf8;');
+    
+    if(isset($_POST{'add_ok'})){
+        $db_data = $db->prepare('INSERT INTO account(id, user_name, pw, role) VALUES (null,:user_name,:pw,:role)');
         $db_data->bindValue(':user_name', $_POST['add_user_name']);
         $db_data->bindValue(':pw', $_POST['add_user_pw']);
-        $db_data->bindValue(':del',"0");
         $db_data->bindValue(':role', $_POST['add_user_role']);
         $db_data->execute();
 
